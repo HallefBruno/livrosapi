@@ -1,7 +1,7 @@
 package com.livro.api.livroapi.book.service;
 
 import com.livro.api.livroapi.model.Author;
-import com.livro.api.livroapi.model.dto.AuthorDTO;
+import com.livro.api.livroapi.dto.AuthorDTO;
 import com.livro.api.livroapi.repository.AuthorRepository;
 import com.livro.api.livroapi.service.AuthorService;
 import java.time.LocalDate;
@@ -57,7 +57,7 @@ public class AuthorServiceTest {
 	}
 	
 	private AuthorDTO getAuthorDTO() {
-		var authorDTO = new AuthorDTO("C.S Lwis", LocalDate.now(), "USA");
+		var authorDTO = AuthorDTO.of("C.S Lwis", LocalDate.now(), "USA");
 		return authorDTO;
 	}
 	

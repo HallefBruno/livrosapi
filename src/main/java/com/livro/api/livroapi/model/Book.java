@@ -6,14 +6,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @Entity
 @Table(name = "tb_book")
@@ -91,14 +87,4 @@ public class Book {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-	
-	@PrePersist
-	@PreUpdate
-	void validBasicEntity() {
-		if(this.name == null||this.name.isBlank()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
-		} else if (this.title == null || this.title.isBlank()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title is required");
-		}
-	}
 }

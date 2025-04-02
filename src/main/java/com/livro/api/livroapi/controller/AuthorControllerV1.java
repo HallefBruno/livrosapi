@@ -1,7 +1,7 @@
 package com.livro.api.livroapi.controller;
 
 import com.livro.api.livroapi.model.Author;
-import com.livro.api.livroapi.model.dto.AuthorDTO;
+import com.livro.api.livroapi.dto.AuthorDTO;
 import com.livro.api.livroapi.service.AuthorService;
 import java.net.URI;
 import java.util.List;

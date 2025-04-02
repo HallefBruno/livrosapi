@@ -1,7 +1,6 @@
 package com.livro.api.livroapi.model;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
@@ -10,8 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,8 +17,6 @@ import java.util.UUID;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @Entity
 @Table(name = "tb_author")
@@ -48,14 +43,14 @@ public class Author {
 
     @JoinColumn(name = "book_id")
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Book> book;
+    private List<Book> books;
 
-	public Author(UUID id, String name, LocalDate dateBirth, String nationality, List<Book> book) {
+	public Author(UUID id, String name, LocalDate dateBirth, String nationality, List<Book> books) {
 		this.id = id;
 		this.name = name;
 		this.dateBirth = dateBirth;
 		this.nationality = nationality;
-		this.book = book;
+		this.books = books;
 	}
 
 	public Author(UUID id, String name, LocalDate dateBirth, String nationality) {
@@ -69,16 +64,6 @@ public class Author {
 		this.name = name;
 		this.dateBirth = dateBirth;
 		this.nationality = nationality;
-	}
-	
-	@PrePersist
-	@PreUpdate
-	void validBasicEntity() {
-		if(this.name == null || this.name.isBlank()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
-		} else if (this.name.length() < 3) {
-			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Name is inválid");
-		}
 	}
 
 	public Author() {
@@ -117,12 +102,12 @@ public class Author {
         this.nationality = nationality;
     }
 
-    public List<Book> getBook() {
-        return book;
+    public List<Book> getBooks() {
+        return books;
     }
 
-    public void setBook(List<Book> book) {
-        this.book = book;
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 
 	public LocalDateTime getDateRegisterSystem() {
