@@ -1,0 +1,33 @@
+server:
+  servlet:
+    context-path: /book-api
+
+spring:
+  application:
+    name: bookapi
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/books
+    username: postgres
+    password: postgres
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/books
+    user: postgres
+    password: postgres
+    enabled: true
+    schemas: public
+    locations: classpath:db/migration
+    baseline-on-migrate: true

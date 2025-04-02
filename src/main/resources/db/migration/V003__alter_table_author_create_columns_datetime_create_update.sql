@@ -1,0 +1,5 @@
+ALTER TABLE IF EXISTS tb_author
+    ADD COLUMN IF NOT EXISTS date_register_system TIMESTAMP;
+
+ALTER TABLE IF EXISTS tb_author
+    ADD COLUMN IF NOT EXISTS last_update_date TIMESTAMP;
