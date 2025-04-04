@@ -1,8 +1,12 @@
 package com.livro.api.livroapi.book.service;
 
+import com.livro.api.livroapi.model.Genero;
+import com.livro.api.livroapi.dto.BookDTO;
 import com.livro.api.livroapi.model.Book;
 import com.livro.api.livroapi.repository.BookRepository;
 import com.livro.api.livroapi.service.BookService;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,17 +37,25 @@ public class BookServiceTest {
 	
 	@Test
     void save() {
-
-        Book book = new Book();
-        book.setId(UUID.randomUUID());
-        book.setTitle("Mockito for Beginners");
-
+		Book book = getBook();
         when(bookRepository.save(any(Book.class))).thenReturn(book);
-
-        String savedBook = bookService.salvar(book);
-		
-        verify(bookRepository, times(1)).save(book);
-
+		BookDTO bookDTO = getBookDTO();
+        String savedBook = bookService.salvar(bookDTO);
+        verify(bookRepository, times(1)).save(any(Book.class));
         assertNotNull(savedBook);
     }
+	
+	private BookDTO getBookDTO() {
+		return new BookDTO("isbn", "name", "title", LocalDate.now(), Genero.DRAMATICO, BigDecimal.TEN);
+	}
+	
+	private Book getBook() {
+		Book book = new Book();
+        book.setId(UUID.randomUUID());
+        book.setTitle("Mockito for Beginners");
+		book.setDatePublish(LocalDate.now());
+		book.setIsbn("isbn");
+		book.setPrice(BigDecimal.ONE);
+		return book;
+	}
 }

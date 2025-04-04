@@ -1,7 +1,9 @@
 package com.livro.api.livroapi.controller;
 
+import com.livro.api.livroapi.dto.BookDTO;
 import com.livro.api.livroapi.model.Book;
 import com.livro.api.livroapi.service.BookService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,7 +31,7 @@ public class BookControllerV1 {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Book> salvar(Book book) {
+	public ResponseEntity<Book> salvar(@RequestBody(required = true) @Valid BookDTO book) {
 		String uuid = bookService.salvar(book);
 		URI toUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{uuid}").buildAndExpand(uuid).toUri();
         return ResponseEntity.created(toUri).build();

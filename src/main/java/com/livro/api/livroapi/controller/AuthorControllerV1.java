@@ -3,6 +3,7 @@ package com.livro.api.livroapi.controller;
 import com.livro.api.livroapi.model.Author;
 import com.livro.api.livroapi.dto.AuthorDTO;
 import com.livro.api.livroapi.service.AuthorService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/v1/author")
@@ -32,7 +32,7 @@ public class AuthorControllerV1 {
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Author> save(@RequestBody(required = true) AuthorDTO author, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Author> save(@RequestBody(required = true) @Valid AuthorDTO author) {
         String uuid = authorService.save(author);
         URI toUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{uuid}").buildAndExpand(uuid).toUri();
         return ResponseEntity.created(toUri).build();

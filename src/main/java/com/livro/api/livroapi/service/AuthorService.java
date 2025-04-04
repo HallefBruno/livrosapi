@@ -1,14 +1,23 @@
 package com.livro.api.livroapi.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livro.api.livroapi.model.Author;
 import com.livro.api.livroapi.dto.AuthorDTO;
 import com.livro.api.livroapi.repository.AuthorRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthorService {
@@ -27,7 +36,8 @@ public class AuthorService {
     }
     
     public Author getAuthor(String uuid) {
-        return authorRepository.getReferenceById(UUID.fromString(uuid));
+		return authorRepository.findById(UUID.fromString(uuid)).orElseThrow(() -> 
+			new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhum resultado encontrado para o identificador: "+uuid));
     }
 	
 	@Transactional

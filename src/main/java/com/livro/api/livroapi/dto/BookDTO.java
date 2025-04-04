@@ -1,5 +1,6 @@
 package com.livro.api.livroapi.dto;
 
+import com.livro.api.livroapi.model.Genero;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ public record BookDTO(
 	@NotNull(message = "Date Publish is required")
 	LocalDate datePublish, 
 	@NotEmpty(message = "Genero is required")
-	String genero, 
+	Genero genero, 
 	@NotNull(message = "Price is required")
 	BigDecimal price) {
 
