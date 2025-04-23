@@ -49,8 +49,9 @@ public class AuthorServiceTest {
 		UUID uuid = UUID.randomUUID();
 		when(authorRepository.findById(uuid)).thenReturn(optionalAuthor());
 		Author authorAtual =  authorRepository.findById(uuid).get();
+		AuthorDTO authorDTO = getAuthorDTO();
 		when(authorRepository.save(any(Author.class))).thenReturn(authorAtual);
-		authorService.update(uuid.toString(), authorAtual);
+		authorService.update(uuid.toString(), authorDTO);
 		verify(authorRepository, times(1)).save(authorAtual);
 		Assertions.assertNotNull(authorAtual.getId());
 	}

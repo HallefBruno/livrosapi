@@ -46,13 +46,16 @@ public class AuthorControllerV1 {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/{uuid}")
-	public void update(@PathVariable(name = "uuid", required = true) String uuid, @RequestBody(required = true) Author author) {
-		authorService.update(uuid, author);
+	public void update(@PathVariable(name = "uuid", required = true) String uuid, @RequestBody(required = true) AuthorDTO authorDTO) {
+		authorService.update(uuid, authorDTO);
 	}
 	
 	@DeleteMapping("/{uuid}")
-	public void delete(@PathVariable(name = "uuid", required = true) String uuid) {
-		authorService.delete(uuid);
+	public ResponseEntity<?> delete(@PathVariable(name = "uuid", required = true) String uuid) {
+		if(authorService.delete(uuid)) {
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.notFound().build();
 	}
 	
 	@GetMapping("/all")
