@@ -4,6 +4,7 @@ import com.livro.api.livroapi.dto.BookDTO;
 import com.livro.api.livroapi.model.Book;
 import com.livro.api.livroapi.repository.BookRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
@@ -35,7 +36,12 @@ public class BookService {
 	
 	@Transactional
 	public void delete(String uuid) {
-		bookRepository.deleteById(UUID.fromString(uuid));
+		Optional<Book> optional = bookRepository.findById(UUID.fromString(uuid));
+		if(optional.isPresent()) {
+			bookRepository.deleteById(UUID.fromString(uuid));
+			return;
+		}
+		throw new RuntimeException("Book not found!");
 	}
 	
 	public Book getBook(String uuid) {
