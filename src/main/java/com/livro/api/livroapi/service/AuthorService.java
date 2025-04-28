@@ -2,11 +2,15 @@ package com.livro.api.livroapi.service;
 
 import com.livro.api.livroapi.model.Author;
 import com.livro.api.livroapi.dto.AuthorDTO;
+import com.livro.api.livroapi.dto.FiltrosAuthor;
 import com.livro.api.livroapi.repository.AuthorRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -51,8 +55,7 @@ public class AuthorService {
 		return false;
 	}
 	
-	public List<Author> getAll(String orderBy) {
-		if(orderBy == null) orderBy = "id";
-		return authorRepository.findAll(Sort.by(orderBy));
+	public Page<Author> getAll(FiltrosAuthor filtrosAuthor) {
+		return authorRepository.pageAuthor(filtrosAuthor);
 	}
 }

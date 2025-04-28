@@ -2,10 +2,11 @@ package com.livro.api.livroapi.controller;
 
 import com.livro.api.livroapi.model.Author;
 import com.livro.api.livroapi.dto.AuthorDTO;
+import com.livro.api.livroapi.dto.FiltrosAuthor;
 import com.livro.api.livroapi.service.AuthorService;
 import jakarta.validation.Valid;
 import java.net.URI;
-import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,8 +61,8 @@ public class AuthorControllerV1 {
 	
 	@GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<Author> getAllAuthors(@RequestParam(name = "oderBy", required = false) String oderBy) {
-        return authorService.getAll(oderBy);
+    public Page<Author> getAllAuthors(@RequestBody(required = true) FiltrosAuthor filtrosAuthor) {
+        return authorService.getAll(filtrosAuthor);
     }
     
 }
