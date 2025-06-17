@@ -2,12 +2,16 @@ package com.livro.api.livroapi.book.service;
 
 import com.livro.api.livroapi.model.Author;
 import com.livro.api.livroapi.dto.AuthorDTO;
+import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.repository.AuthorRepository;
 import com.livro.api.livroapi.service.AuthorService;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +46,20 @@ public class AuthorServiceTest {
 		String uuId = authorService.save(authorDTO);
 		verify(authorRepository, times(1)).save(any(Author.class));
 		Assertions.assertNotNull(uuId);
+	}
+	
+	@Test
+	void naoDevesalvar() {
+		AuthorDTO authorDTO = getAuthorDTO();
+		when(authorRepository.existsByNameIgnoreCaseAndDateBirthAndNationalityIgnoreCase(
+			authorDTO.name(), 
+			authorDTO.dateBirth(), 
+			authorDTO.nationality())
+		).thenReturn(Boolean.TRUE);
+		
+		ConflictException exception = 
+			assertThrows(ConflictException.class,() -> authorService.save(authorDTO));
+		assertEquals("Esse registro já existe na base de dados!", exception.getMessage());
 	}
 	
 	@Test
