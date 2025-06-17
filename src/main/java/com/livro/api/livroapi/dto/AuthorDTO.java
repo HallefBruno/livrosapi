@@ -25,5 +25,4 @@ public record AuthorDTO(
 		BeanUtils.copyProperties(authorDTO, author);
 		return author;
 	}
-	
 }

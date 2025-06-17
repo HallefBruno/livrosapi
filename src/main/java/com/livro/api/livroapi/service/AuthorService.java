@@ -3,6 +3,7 @@ package com.livro.api.livroapi.service;
 import com.livro.api.livroapi.model.Author;
 import com.livro.api.livroapi.dto.AuthorDTO;
 import com.livro.api.livroapi.dto.FiltrosAuthor;
+import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.repository.AuthorRepository;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +25,9 @@ public class AuthorService {
 
     @Transactional
     public String save(AuthorDTO authorDTO) {
+		if(authorRepository.existsByNameIgnoreCaseAndDateBirthAndNationalityIgnoreCase(authorDTO.name(), authorDTO.dateBirth(), authorDTO.nationality())) {
+			throw new ConflictException("Esse registro já existe na base de dados!");
+		}
 		Author author = AuthorDTO.converter(authorDTO);
         return authorRepository.save(author).getId().toString();
     }
@@ -35,7 +39,7 @@ public class AuthorService {
 	
 	@Transactional
 	public void update(String uuid, AuthorDTO authorDTO) {
-		Author authorAtual = authorRepository.findById(UUID.fromString(uuid)).get();
+		Author authorAtual = getAuthor(uuid);
 		BeanUtils.copyProperties(authorDTO, authorAtual, "id");
 		authorRepository.save(authorAtual);
 	}
