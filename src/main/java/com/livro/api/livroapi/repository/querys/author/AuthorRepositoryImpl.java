@@ -58,8 +58,9 @@ public class AuthorRepositoryImpl implements AuthorRepositoryCustom {
 		query.where(predicates.toArray(Predicate[]::new));
 		if(filtrosAuthor.getDirection().equalsIgnoreCase("asc")) {
 			query.orderBy(cb.asc(author.get(filtrosAuthor.getOrderBy())));
+		} else {
+			query.orderBy(cb.desc(author.get(filtrosAuthor.getOrderBy())));
 		}
-		query.orderBy(cb.desc(author.get(filtrosAuthor.getOrderBy())));
 		TypedQuery<Author> typedQuery = em.createQuery(query);
 		typedQuery.setFirstResult(primeiroRegistro);
 		typedQuery.setMaxResults(totalRegistrosPorPagina);
