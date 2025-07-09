@@ -46,7 +46,7 @@ public class AuthorControllerV1 {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/{uuid}")
-	public void update(@PathVariable(name = "uuid", required = true) String uuid, @RequestBody(required = true) AuthorDTO authorDTO) {
+	public void update(@PathVariable(name = "uuid", required = true) String uuid, @RequestBody(required = true) @Valid AuthorDTO authorDTO) {
 		authorService.update(uuid, authorDTO);
 	}
 	

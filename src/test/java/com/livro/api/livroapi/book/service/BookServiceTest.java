@@ -59,11 +59,12 @@ public class BookServiceTest {
 	
 	@Test
 	void update() {
+		BookDTO bookDTO = getBookDTO();
 		Book book = getBook();
 		when(bookRepository.save(any(Book.class))).thenReturn(book);
 		when(bookRepository.findById(any(UUID.class))).thenReturn(Optional.of(book));
 		String id = book.getId().toString();
-		bookService.update(id, book);
+		bookService.update(id, bookDTO);
 		verify(bookRepository, times(1)).save(any(Book.class));
 		verify(bookRepository, times(1)).findById(any(UUID.class));
 		verify(bookRepository, never()).deleteById(any(UUID.class));

@@ -7,6 +7,7 @@ import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.repository.AuthorRepository;
 import java.util.Optional;
 import java.util.UUID;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthorService {
     
     private AuthorRepository authorRepository;
+	private ModelMapper modelMapper;
     
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, ModelMapper modelMapper) {
         this.authorRepository = authorRepository;
+		this.modelMapper = modelMapper;
     }
 
     @Transactional
@@ -28,7 +31,7 @@ public class AuthorService {
 		if(authorRepository.existsByNameIgnoreCaseAndDateBirthAndNationalityIgnoreCase(authorDTO.name(), authorDTO.dateBirth(), authorDTO.nationality())) {
 			throw new ConflictException("Esse registro já existe na base de dados!");
 		}
-		Author author = AuthorDTO.converter(authorDTO);
+		Author author = modelMapper.map(authorDTO, Author.class);
         return authorRepository.save(author).getId().toString();
     }
     

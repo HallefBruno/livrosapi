@@ -1,6 +1,7 @@
 package com.livro.api.livroapi.service;
 
 import com.livro.api.livroapi.dto.BookDTO;
+import com.livro.api.livroapi.exception.NotFoundException;
 import com.livro.api.livroapi.model.Book;
 import com.livro.api.livroapi.repository.BookRepository;
 import java.util.List;
@@ -28,9 +29,9 @@ public class BookService {
 	}
 	
 	@Transactional
-	public void update(String uuid, Book book) {
+	public void update(String uuid, BookDTO book) {
 		Book bookAtual = bookRepository.findById(UUID.fromString(uuid)).get();
-		BeanUtils.copyProperties(book, bookAtual);
+		BeanUtils.copyProperties(book, bookAtual, "id");
 		bookRepository.save(bookAtual);
 	}
 	
@@ -41,7 +42,7 @@ public class BookService {
 			bookRepository.deleteById(UUID.fromString(uuid));
 			return;
 		}
-		throw new RuntimeException("Book not found!");
+		throw new NotFoundException("Book not found!");
 	}
 	
 	public Book getBook(String uuid) {

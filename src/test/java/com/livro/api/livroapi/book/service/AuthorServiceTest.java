@@ -6,7 +6,6 @@ import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.repository.AuthorRepository;
 import com.livro.api.livroapi.service.AuthorService;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -23,6 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorServiceTest {
@@ -33,6 +33,9 @@ public class AuthorServiceTest {
 	@Mock
 	private AuthorRepository authorRepository;
 	
+	@Mock
+	private ModelMapper modelMapper;
+	
 	@BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
@@ -42,6 +45,7 @@ public class AuthorServiceTest {
 	void salvar() {
 		Author author = getAuthor();
 		AuthorDTO authorDTO = getAuthorDTO();
+		when(modelMapper.map(authorDTO, Author.class)).thenReturn(author);
 		when(authorRepository.save(any(Author.class))).thenReturn(author);
 		String uuId = authorService.save(authorDTO);
 		verify(authorRepository, times(1)).save(any(Author.class));

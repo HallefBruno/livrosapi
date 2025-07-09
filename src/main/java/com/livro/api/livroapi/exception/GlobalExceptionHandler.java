@@ -10,13 +10,14 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
 			fieldMessages.add(new FieldMessage(fieldError.getField(), fieldError.getDefaultMessage()));
 		}
-        return new ResponseEntity<>(new ResponseError(HttpStatus.BAD_REQUEST.value(), "Erro de validação", fieldMessages), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", fieldMessages), new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	
 	@ExceptionHandler(ResponseStatusException.class)
@@ -34,9 +35,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 	
 	@ExceptionHandler(ConflictException.class)
-	public ResponseEntity<?> conflictExceptionException(ConflictException ex) {
-		var responseError = ResponseError.responseMessageConflict(HttpStatus.CONFLICT.value(), ex.getMessage());
-        return new ResponseEntity<>(responseError, new HttpHeaders(), responseError.status());
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public ResponseError conflictExceptionException(ConflictException ex) {
+		return ResponseError.responseMessageConflict(HttpStatus.CONFLICT.value(), ex.getMessage());
     }
+	
+	@ExceptionHandler(NotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseError notFoundException(NotFoundException ex) {
+		return ResponseError.responseMessageConflict(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+	}
 
 }

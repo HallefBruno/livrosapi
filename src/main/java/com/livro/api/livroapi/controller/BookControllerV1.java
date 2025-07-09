@@ -39,7 +39,7 @@ public class BookControllerV1 {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping("/{uuid}")
-	public void update(@PathVariable(name = "uuid", required = true) String uuid, Book book) {
+	public void update(@PathVariable(name = "uuid", required = true) String uuid, @Valid BookDTO book) {
 		bookService.update(uuid, book);
 	}
 	
