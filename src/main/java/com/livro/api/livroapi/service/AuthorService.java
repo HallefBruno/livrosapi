@@ -5,14 +5,19 @@ import com.livro.api.livroapi.dto.AuthorDTO;
 import com.livro.api.livroapi.dto.FiltrosAuthor;
 import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.repository.AuthorRepository;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -59,5 +64,21 @@ public class AuthorService {
 	
 	public Page<Author> getAll(FiltrosAuthor filtrosAuthor) {
 		return authorRepository.pageAuthor(filtrosAuthor);
+	}
+	
+	public List<Author> exampleAllAuthors(FiltrosAuthor filtrosAuthor) {
+		if(filtrosAuthor != null && StringUtils.hasText(filtrosAuthor.getName()) || StringUtils.hasText(filtrosAuthor.getNationality()) ) {
+			ExampleMatcher exampleMatcher = ExampleMatcher
+				.matching()
+				.withIgnoreNullValues()
+				.withIgnoreCase()
+				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+			Author author = new Author();
+			author.setName(filtrosAuthor.getName());
+			author.setNationality(filtrosAuthor.getNationality());
+			Example<Author> example = Example.of(author, exampleMatcher);
+			return authorRepository.findAll(example);
+		}
+		return authorRepository.findAll();
 	}
 }

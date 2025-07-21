@@ -6,6 +6,7 @@ import com.livro.api.livroapi.dto.FiltrosAuthor;
 import com.livro.api.livroapi.service.AuthorService;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +64,11 @@ public class AuthorControllerV1 {
     public Page<Author> getAllAuthors(@RequestBody(required = true) FiltrosAuthor filtrosAuthor) {
         return authorService.getAll(filtrosAuthor);
     }
+	
+	@GetMapping("/all/v2")
+	@ResponseStatus(HttpStatus.OK)
+	public List<Author> getAllAuthorsv2(@RequestBody(required = false) FiltrosAuthor filtrosAuthor) {
+		return authorService.exampleAllAuthors(filtrosAuthor);
+	}
     
 }

@@ -4,6 +4,7 @@ package com.livro.api.livroapi.dto;
 public class FiltrosAuthor extends FiltrosDefault {
 	
 	private String name;
+	private String nationality;
 	private String bookName;
 
 	public String getName() {
@@ -21,4 +22,13 @@ public class FiltrosAuthor extends FiltrosDefault {
 	public void setBookName(String bookName) {
 		this.bookName = bookName;
 	}
+
+	public String getNationality() {
+		return nationality;
+	}
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+	
 }
