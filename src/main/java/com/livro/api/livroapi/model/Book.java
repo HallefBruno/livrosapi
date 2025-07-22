@@ -3,10 +3,14 @@ package com.livro.api.livroapi.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Future;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -25,12 +29,17 @@ public class Book {
     
     private String title;
     
+	@Future(message = "Publication date must be in the future")
     private LocalDate datePublish;
 
     @Enumerated(EnumType.STRING)
     private Genero genero;
     
     private BigDecimal price;
+	
+	@JoinColumn(name = "author_id")
+	@ManyToOne(cascade = {}, fetch = FetchType.LAZY)
+	public Author author;
 
     public UUID getId() {
         return id;

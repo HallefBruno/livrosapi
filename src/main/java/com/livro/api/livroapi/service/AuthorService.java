@@ -1,7 +1,7 @@
 package com.livro.api.livroapi.service;
 
 import com.livro.api.livroapi.model.Author;
-import com.livro.api.livroapi.dto.AuthorDTO;
+import com.livro.api.livroapi.dto.author.AuthorDTO;
 import com.livro.api.livroapi.dto.FiltrosAuthor;
 import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.repository.AuthorRepository;

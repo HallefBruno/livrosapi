@@ -1,7 +1,7 @@
 package com.livro.api.livroapi.book.service;
 
 import com.livro.api.livroapi.model.Genero;
-import com.livro.api.livroapi.dto.BookDTO;
+import com.livro.api.livroapi.dto.book.BookDTO;
 import com.livro.api.livroapi.model.Book;
 import com.livro.api.livroapi.repository.BookRepository;
 import com.livro.api.livroapi.service.BookService;

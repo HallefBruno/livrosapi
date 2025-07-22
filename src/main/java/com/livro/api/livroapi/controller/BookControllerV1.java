@@ -1,11 +1,14 @@
 package com.livro.api.livroapi.controller;
 
-import com.livro.api.livroapi.dto.BookDTO;
+import com.livro.api.livroapi.dto.book.BookDTO;
+import com.livro.api.livroapi.dto.book.BookResponseDTO;
+import com.livro.api.livroapi.dto.book.FiltersBookDTO;
 import com.livro.api.livroapi.model.Book;
 import com.livro.api.livroapi.service.BookService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,6 +60,11 @@ public class BookControllerV1 {
 	@GetMapping("/{oderBy}")
 	public List<Book> allBooks(@RequestParam(name = "orderBy", required = false) String orderBy) {
 		return ResponseEntity.ok(bookService.getAll(orderBy)).getBody();
+	}
+	
+	@GetMapping("/all-books")
+	public Page<BookResponseDTO> allBooks(@RequestBody FiltersBookDTO filtersBookDTO) {
+		return ResponseEntity.ok(bookService.pageBooks(filtersBookDTO)).getBody();
 	}
 	
 }

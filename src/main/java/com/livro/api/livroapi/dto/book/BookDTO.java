@@ -1,4 +1,4 @@
-package com.livro.api.livroapi.dto;
+package com.livro.api.livroapi.dto.book;
 
 import com.livro.api.livroapi.model.Genero;
 import jakarta.validation.constraints.NotEmpty;

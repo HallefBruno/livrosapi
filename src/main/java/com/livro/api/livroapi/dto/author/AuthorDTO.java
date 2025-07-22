@@ -1,5 +1,6 @@
-package com.livro.api.livroapi.dto;
+package com.livro.api.livroapi.dto.author;
 
+import com.livro.api.livroapi.dto.book.BookDTO;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;

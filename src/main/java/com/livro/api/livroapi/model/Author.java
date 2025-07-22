@@ -7,7 +7,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
@@ -41,8 +40,7 @@ public class Author {
 	
 	private UUID userId;
 
-    @JoinColumn(name = "book_id")
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "author")
     private List<Book> books;
 
 	public Author(UUID id, String name, LocalDate dateBirth, String nationality, List<Book> books) {

@@ -1,7 +1,7 @@
 package com.livro.api.livroapi.controller;
 
 import com.livro.api.livroapi.model.Author;
-import com.livro.api.livroapi.dto.AuthorDTO;
+import com.livro.api.livroapi.dto.author.AuthorDTO;
 import com.livro.api.livroapi.dto.FiltrosAuthor;
 import com.livro.api.livroapi.service.AuthorService;
 import jakarta.validation.Valid;

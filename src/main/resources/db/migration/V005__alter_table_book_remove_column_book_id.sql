@@ -1,0 +1,1 @@
+ALTER TABLE tb_book DROP COLUMN IF EXISTS book_id;
