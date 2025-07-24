@@ -3,12 +3,14 @@ package com.livro.api.livroapi.service;
 import com.livro.api.livroapi.dto.book.BookDTO;
 import com.livro.api.livroapi.dto.book.BookResponseDTO;
 import com.livro.api.livroapi.dto.book.FiltersBookDTO;
+import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.exception.NotFoundException;
 import com.livro.api.livroapi.model.Book;
 import com.livro.api.livroapi.repository.BookRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -26,9 +28,9 @@ public class BookService {
 	
 	@Transactional
 	public String salvar(BookDTO bookDTO) {
-		Book book = new Book();
-		BeanUtils.copyProperties(bookDTO, book);
-		return bookRepository.save(book).getId().toString();
+			Book book = new Book();
+			BeanUtils.copyProperties(bookDTO, book);
+			return bookRepository.save(book).getId().toString();
 	}
 	
 	@Transactional

@@ -6,17 +6,13 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record BookResponseDTO(
-	
-	UUID id,	
-	String isbn,
-	String name,
-	String title,
-	LocalDate datePublish,
-	Genero genero,
-	BigDecimal price,
-	AuthorResponseDTO author
-		
-	){
-	
-	public BookResponseDTO {}
+    UUID id,
+    String isbn,
+    String name,
+    String title,
+    LocalDate datePublish,
+    Genero genero,
+    BigDecimal price,
+    AuthorResponseDTO author) {
 }
+

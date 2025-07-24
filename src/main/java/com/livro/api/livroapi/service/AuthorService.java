@@ -5,6 +5,7 @@ import com.livro.api.livroapi.dto.author.AuthorDTO;
 import com.livro.api.livroapi.dto.FiltrosAuthor;
 import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.repository.AuthorRepository;
+import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,8 +38,8 @@ public class AuthorService {
 			throw new ConflictException("Esse registro já existe na base de dados!");
 		}
 		Author author = modelMapper.map(authorDTO, Author.class);
-        return authorRepository.save(author).getId().toString();
-    }
+		return authorRepository.save(author).getId().toString();
+	}
     
     public Author getAuthor(String uuid) {
 		return authorRepository.findById(UUID.fromString(uuid)).orElseThrow(() -> 

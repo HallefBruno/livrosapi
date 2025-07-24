@@ -2,12 +2,16 @@ package com.livro.api.livroapi.exception;
 
 import com.livro.api.livroapi.dto.FieldMessage;
 import com.livro.api.livroapi.dto.ResponseError;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -45,5 +49,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseError notFoundException(NotFoundException ex) {
 		return ResponseError.responseMessageConflict(HttpStatus.NOT_FOUND.value(), ex.getMessage());
 	}
-
+	
+	@ExceptionHandler(TransactionSystemException.class)
+	public ResponseError handleTransactionException(TransactionSystemException ex) {
+		Throwable cause = ex.getRootCause();
+		List<FieldMessage> fieldMessages = new ArrayList<>();
+		if (cause instanceof ConstraintViolationException constraintViolationException) {
+			for(ConstraintViolation constraintViolation : constraintViolationException.getConstraintViolations()) {
+				fieldMessages.add(new FieldMessage(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage()));
+			}
+			return new ResponseError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", fieldMessages);
+		}
+		return new ResponseError(500, "Erro interno no servidor", Collections.emptyList());
+	}
 }
