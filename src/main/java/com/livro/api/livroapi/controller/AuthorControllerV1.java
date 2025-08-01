@@ -23,7 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/v1/author")
-public class AuthorControllerV1 {
+public class AuthorControllerV1 implements GenericController {
     
     private AuthorService authorService;
     
@@ -35,10 +35,10 @@ public class AuthorControllerV1 {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Author> save(@RequestBody(required = true) @Valid AuthorDTO author) {
         String uuid = authorService.save(author);
-        URI toUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{uuid}").buildAndExpand(uuid).toUri();
+        URI toUri = gerarHeaderLocaltion(uuid);
         return ResponseEntity.created(toUri).build();
     }
-    
+	
     @GetMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
     public Author getAuthor(@PathVariable(name = "uuid", required = true) String uuid) {
@@ -64,11 +64,5 @@ public class AuthorControllerV1 {
     public Page<Author> getAllAuthors(@RequestBody(required = true) FiltrosAuthor filtrosAuthor) {
         return authorService.getAll(filtrosAuthor);
     }
-	
-	@GetMapping("/all/v2")
-	@ResponseStatus(HttpStatus.OK)
-	public List<Author> getAllAuthorsv2(@RequestBody(required = false) FiltrosAuthor filtrosAuthor) {
-		return authorService.exampleAllAuthors(filtrosAuthor);
-	}
     
 }

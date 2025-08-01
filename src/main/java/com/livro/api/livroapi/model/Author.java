@@ -1,5 +1,6 @@
 package com.livro.api.livroapi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -11,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.annotation.CreatedDate;
@@ -39,9 +41,10 @@ public class Author {
 	private LocalDateTime lastUpdateDate;
 	
 	private UUID userId;
-
+	
+	@JsonManagedReference
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "author")
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
 	public Author(UUID id, String name, LocalDate dateBirth, String nationality, List<Book> books) {
 		this.id = id;

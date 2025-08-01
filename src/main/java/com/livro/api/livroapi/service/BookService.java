@@ -3,19 +3,20 @@ package com.livro.api.livroapi.service;
 import com.livro.api.livroapi.dto.book.BookDTO;
 import com.livro.api.livroapi.dto.book.BookResponseDTO;
 import com.livro.api.livroapi.dto.book.FiltersBookDTO;
-import com.livro.api.livroapi.exception.ConflictException;
 import com.livro.api.livroapi.exception.NotFoundException;
 import com.livro.api.livroapi.model.Book;
 import com.livro.api.livroapi.repository.BookRepository;
+import com.livro.api.livroapi.repository.specification.BookSpecification;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 public class BookService {
@@ -28,9 +29,9 @@ public class BookService {
 	
 	@Transactional
 	public String salvar(BookDTO bookDTO) {
-			Book book = new Book();
-			BeanUtils.copyProperties(bookDTO, book);
-			return bookRepository.save(book).getId().toString();
+		Book book = new Book();
+		BeanUtils.copyProperties(bookDTO, book);
+		return bookRepository.save(book).getId().toString();
 	}
 	
 	@Transactional
@@ -60,7 +61,20 @@ public class BookService {
 	}
 	
 	public Page<BookResponseDTO> pageBooks(FiltersBookDTO filtersBookDTO) {
-		bookRepository.pageBooks(filtersBookDTO);
-		return null;
+		return bookRepository.pageBooks(filtersBookDTO);
+	}
+	
+	public Page<BookResponseDTO> pageBooksV2(FiltersBookDTO filtersBookDTO) {
+		return bookRepository.pageBooksV2(filtersBookDTO);
+	}
+	
+	public List<Book> livros(FiltersBookDTO filtersBookDTO) {
+		Specification specs = Specification.where((root, query, cb) -> cb.conjunction());
+		
+		if(StringUtils.hasText(filtersBookDTO.getIsbn())) {
+			specs = specs.and(BookSpecification.isbnEqual(filtersBookDTO.getIsbn()));
+		}
+		
+		return bookRepository.findAll(specs);
 	}
 }

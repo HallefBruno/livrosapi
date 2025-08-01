@@ -49,9 +49,15 @@ public class AuthorRepositoryImpl implements AuthorRepositoryCustom {
 		}
 		
 		if(filtrosAuthorIsValid(filtrosAuthor) && Objects.nonNull(filtrosAuthor.getBookName())) {
-			predicates.add( cb.like(cb.upper(book.get("name")), "%" + filtrosAuthor.getBookName()+ "%" ) );
+			predicates.add( cb.like(cb.upper(book.get("name")), "%" + filtrosAuthor.getBookName().toUpperCase()  + "%" ) );
 			sql.append(" and upper(b.name) like upper(concat('%', :bookName ,'%'))  ");
 			map.put("bookName", filtrosAuthor.getBookName());
+		}
+		
+		if(filtrosAuthorIsValid(filtrosAuthor) && Objects.nonNull(filtrosAuthor.getNationality())) {
+			predicates.add( cb.like(cb.upper(author.get("nationality")), "%" + filtrosAuthor.getNationality().toUpperCase() + "%" ) );
+			sql.append(" and upper(a.nationality) like upper(concat('%', :nationality ,'%'))  ");
+			map.put("nationality", filtrosAuthor.getNationality());
 		}
 		
 		query.select(author);

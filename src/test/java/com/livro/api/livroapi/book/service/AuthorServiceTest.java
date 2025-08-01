@@ -2,10 +2,16 @@ package com.livro.api.livroapi.book.service;
 
 import com.livro.api.livroapi.model.Author;
 import com.livro.api.livroapi.dto.author.AuthorDTO;
+import com.livro.api.livroapi.dto.book.BookDTO;
 import com.livro.api.livroapi.exception.ConflictException;
+import com.livro.api.livroapi.model.Book;
+import com.livro.api.livroapi.model.Genero;
 import com.livro.api.livroapi.repository.AuthorRepository;
 import com.livro.api.livroapi.service.AuthorService;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -79,17 +85,25 @@ public class AuthorServiceTest {
 	}
 	
 	private AuthorDTO getAuthorDTO() {
-		var authorDTO = AuthorDTO.of("C.S Lwis", LocalDate.now(), "USA");
+		var authorDTO = new AuthorDTO("name", LocalDate.now(), "nationality", new ArrayList<>(List.of(getBookDTO())));
 		return authorDTO;
 	}
 	
 	private Author getAuthor() {
-		Author author = new Author(UUID.randomUUID(), "Nome do autor", LocalDate.now(), "USA");
+		Author author = new Author(UUID.randomUUID(), "Nome do autor", LocalDate.now(), "USA", new ArrayList<>(List.of(getBook())));
 		return author;
 	}
 	
 	private Optional<Author> optionalAuthor() {
 		return Optional.of(new Author(UUID.randomUUID(), "Olavo de Carvalho", LocalDate.now(), "BRA"));
+	}
+	
+	private BookDTO getBookDTO() {
+		return new BookDTO("isbn", "name", "title", LocalDate.now(), Genero.AUTOBIOGRAFIA, new BigDecimal("10.90"));
+	}
+	
+	private Book getBook() {
+		return new Book(UUID.randomUUID(), "isbn", "name", "title", LocalDate.now(), Genero.LIRICO, BigDecimal.ONE);
 	}
 	
 }

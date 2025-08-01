@@ -21,11 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/v1/book")
-public class BookControllerV1 {
+public class BookControllerV1 implements GenericController {
 	
 	private BookService bookService;
 	
@@ -36,7 +35,7 @@ public class BookControllerV1 {
 	@PostMapping
 	public ResponseEntity<Book> salvar(@RequestBody(required = true) @Valid BookDTO book) {
 		String uuid = bookService.salvar(book);
-		URI toUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{uuid}").buildAndExpand(uuid).toUri();
+		URI toUri = gerarHeaderLocaltion(uuid);
         return ResponseEntity.created(toUri).build();
 	}
 	
@@ -65,6 +64,11 @@ public class BookControllerV1 {
 	@GetMapping("/all-books")
 	public Page<BookResponseDTO> allBooks(@RequestBody FiltersBookDTO filtersBookDTO) {
 		return ResponseEntity.ok(bookService.pageBooks(filtersBookDTO)).getBody();
+	}
+	
+	@GetMapping("/v2/all-books")
+	public Page<BookResponseDTO> allBooksV2(@RequestBody FiltersBookDTO filtersBookDTO) {
+		return ResponseEntity.ok(bookService.pageBooksV2(filtersBookDTO)).getBody();
 	}
 	
 }
